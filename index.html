@@ -47,10 +47,26 @@
     .button:hover {
         background: #0056b3;
     }
+    .image-link {
+        display: block;
+        margin: 0 auto 20px;
+    }
+    .image-link img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        transition: transform 0.3s ease;
+    }
+    .image-link img:hover {
+        transform: scale(1.05);
+    }
 </style>
 </head>
 <body>
     <div class="container">
+        <a href="https://www.example.com" class="image-link">
+            <img src="path-to-your-image.jpg" alt="个人介绍图片">
+        </a>
         <h1>欢迎来到我的个人介绍页面</h1>
         <p>这里是关于我的一些介绍，包括我的背景、技能和兴趣爱好。</p>
         <a href="https://www.example.com" class="button">了解更多</a>
