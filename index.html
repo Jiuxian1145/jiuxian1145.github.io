@@ -2,30 +2,86 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>共享字符串存储</title>
+<title>Shared String Storage with IndexedDB</title>
 <script>
-// 当页面加载时，检查localStorage中是否有存储的字符串
-document.addEventListener('DOMContentLoaded', function() {
-    var sharedString = localStorage.getItem('sharedString');
-    if (sharedString) {
-        document.getElementById('sharedStringDisplay').textContent = sharedString;
-    } else {
-        localStorage.setItem('sharedString', 'Hello, world!');
-        document.getElementById('sharedStringDisplay').textContent = 'Hello, world!';
-    }
-});
+// 打开数据库的函数
+function openDB() {
+    var dbName = 'sharedStringDB';
+    var storeName = 'sharedStringStore';
+    var db;
+    
+    // 打开数据库请求
+    var request = indexedDB.open(dbName, 1);
 
-// 当文本框失去焦点时，更新localStorage中的字符串
-function updateSharedString() {
-    var newString = document.getElementById('sharedStringInput').value;
-    localStorage.setItem('sharedString', newString);
-    document.getElementById('sharedStringDisplay').textContent = newString;
+    request.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if(!db.objectStoreNames.contains(storeName)) {
+            db.createObjectStore(storeName, {keyPath: 'id'});
+        }
+    };
+
+    request.onsuccess = function(e) {
+        db = e.target.result;
+    };
+
+    request.onerror = function(e) {
+        console.error('Database error:', e.target.error);
+    };
+
+    return db;
 }
+
+// 存储字符串的函数
+function storeString(db, string) {
+    var transaction = db.transaction([storeName], 'readwrite');
+    var store = transaction.objectStore(storeName);
+    var request = store.put({id: 1, string: string});
+
+    request.onsuccess = function() {
+        console.log('String stored successfully');
+    };
+
+    request.onerror = function(e) {
+        console.error('Error storing string:', e.target.error);
+    };
+}
+
+// 获取字符串的函数
+function getString(db) {
+    var transaction = db.transaction([storeName], 'readonly');
+    var store = transaction.objectStore(storeName);
+    var request = store.get(1);
+
+    request.onsuccess = function(e) {
+        var result = e.target.result;
+        if (result) {
+            document.getElementById('sharedStringDisplay').textContent = result.string;
+        }
+    };
+
+    request.onerror = function(e) {
+        console.error('Error getting string:', e.target.error);
+    };
+}
+
+// 更新字符串并存储的函数
+function updateSharedString() {
+    var db = openDB();
+    var newString = document.getElementById('sharedStringInput').value;
+    storeString(db, newString);
+    getString(db);
+}
+
+// 页面加载时初始化
+document.addEventListener('DOMContentLoaded', function() {
+    var db = openDB();
+    getString(db);
+});
 </script>
 </head>
 <body>
-<h1>共享字符串存储</h1>
-<p>当前共享字符串: <span id="sharedStringDisplay"></span></p>
-<input type="text" id="sharedStringInput" placeholder="在此处键入新字符串" onblur="updateSharedString()">
+<h1>Shared String Storage with IndexedDB</h1>
+<p>Current shared string: <span id="sharedStringDisplay"></span></p>
+<input type="text" id="sharedStringInput" placeholder="Type a new string here" onblur="updateSharedString()">
 </body>
 </html>
