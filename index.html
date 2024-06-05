@@ -2,34 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>File Upload Tool</title>
-<script>
-function handleFileSelect(event) {
-    var files = event.target.files; // FileList object
-
-    // 处理文件
-    for (var i = 0, f; f = files[i]; i++) {
-        // 这里可以添加处理文件的逻辑，例如读取文件内容等
-        console.log('选中文件:', f.name);
-        // 由于GitHub Pages不支持文件存储，您需要使用第三方服务来处理文件上传
-        // 例如，您可以使用云存储服务（如Amazon S3、Google Cloud Storage等）的API
-        // 或者使用文件上传服务（如Dropbox、Google Drive等）的API
-        // 这里需要您自己实现与第三方服务的集成
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人介绍页面</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
     }
-}
-
-function handleUpload(event) {
-    // 这里可以添加上传文件的逻辑
-    // 请注意，GitHub Pages不支持文件上传，您需要使用第三方服务
-    event.preventDefault();
-    alert('请使用第三方服务来上传文件。');
-}
-</html>
+    .container {
+        text-align: center;
+        background: white;
+        padding: 50px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: auto;
+    }
+    h1 {
+        color: #333;
+    }
+    p {
+        color: #666;
+    }
+    .button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 30px;
+        cursor: pointer;
+        color: #fff;
+        background: #007bff;
+        border: none;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        font-size: 16px;
+        text-decoration: none;
+    }
+    .button:hover {
+        background: #0056b3;
+    }
+</style>
+</head>
 <body>
-<h1>文件上传工具</h1>
-<!-- 文件选择输入 -->
-<input type="file" id="fileInput" multiple onchange="handleFileSelect(event)">
-<!-- 上传按钮 -->
-<button onclick="handleUpload(event)">上传文件</button>
+    <div class="container">
+        <h1>欢迎来到我的个人介绍页面</h1>
+        <p>这里是关于我的一些介绍，包括我的背景、技能和兴趣爱好。</p>
+        <a href="https://www.example.com" class="button">了解更多</a>
+    </div>
 </body>
 </html>
