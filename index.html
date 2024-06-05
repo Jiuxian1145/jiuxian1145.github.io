@@ -1,43 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JX</title>
-    <script>
-        // 当页面加载时，尝试从localStorage获取字符串
-        window.onload = function() {
-            var storedString = localStorage.getItem('dynamicString');
-            if (storedString) {
-                document.getElementById('stringDisplay').innerText = storedString;
-            }
-        };
+<meta charset="UTF-8">
+<title>Shared String Storage</title>
+<script>
+// 当页面加载时，检查localStorage中是否有存储的字符串
+document.addEventListener('DOMContentLoaded', function() {
+    var sharedString = localStorage.getItem('sharedString');
+    if (sharedString) {
+        document.getElementById('sharedStringDisplay').textContent = sharedString;
+    } else {
+        localStorage.setItem('sharedString', 'Hello, world!');
+        document.getElementById('sharedStringDisplay').textContent = 'Hello, world!';
+    }
+});
 
-        // 当用户提交表单时，通过POST请求更改字符串
-        function updateString() {
-            var newString = document.getElementById('dynamicString').value;
-            localStorage.setItem('dynamicString', newString);
-            // 这里我们不实际发送POST请求，而是直接更新localStorage
-            // 如果你需要发送POST请求到服务器，你可以在这里添加AJAX代码
-            document.getElementById('stringDisplay').innerText = newString;
-        }
-
-        // 当用户点击获取按钮时，通过GET请求获取字符串
-        function getString() {
-            var storedString = localStorage.getItem('dynamicString');
-            document.getElementById('stringDisplay').innerText = storedString;
-        }
-    </script>
+// 当文本框失去焦点时，更新localStorage中的字符串
+function updateSharedString() {
+    var newString = document.getElementById('sharedStringInput').value;
+    localStorage.setItem('sharedString', newString);
+    document.getElementById('sharedStringDisplay').textContent = newString;
+}
+</script>
 </head>
 <body>
-    <h1>当前字符串: <span id="stringDisplay">(未设置)</span></h1>
-
-    <form onsubmit="updateString(); return false;">
-        <label for="dynamicString">更改字符串:</label>
-        <input type="text" id="dynamicString" placeholder="输入新的字符串">
-        <input type="submit" value="更改">
-    </form>
-
-    <button onclick="getString()">获取当前字符串</button>
+<h1>Shared String Storage</h1>
+<p>Current shared string: <span id="sharedStringDisplay"></span></p>
+<input type="text" id="sharedStringInput" placeholder="Type a new string here" onblur="updateSharedString()">
 </body>
 </html>
