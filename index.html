@@ -2,86 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>共享字符串存储</title>
+<title>File Upload Tool</title>
 <script>
-// 打开数据库的函数
-function openDB() {
-    var dbName = 'sharedStringDB';
-    var storeName = 'sharedStringStore';
-    var db;
-    
-    // 打开数据库请求
-    var request = indexedDB.open(dbName, 1);
+function handleFileSelect(event) {
+    var files = event.target.files; // FileList object
 
-    request.onupgradeneeded = function(e) {
-        var db = e.target.result;
-        if(!db.objectStoreNames.contains(storeName)) {
-            db.createObjectStore(storeName, {keyPath: 'id'});
-        }
-    };
-
-    request.onsuccess = function(e) {
-        db = e.target.result;
-    };
-
-    request.onerror = function(e) {
-        console.error('Database error:', e.target.error);
-    };
-
-    return db;
+    // 处理文件
+    for (var i = 0, f; f = files[i]; i++) {
+        // 这里可以添加处理文件的逻辑，例如读取文件内容等
+        console.log('选中文件:', f.name);
+        // 由于GitHub Pages不支持文件存储，您需要使用第三方服务来处理文件上传
+        // 例如，您可以使用云存储服务（如Amazon S3、Google Cloud Storage等）的API
+        // 或者使用文件上传服务（如Dropbox、Google Drive等）的API
+        // 这里需要您自己实现与第三方服务的集成
+    }
 }
 
-// 存储字符串的函数
-function storeString(db, string) {
-    var transaction = db.transaction([storeName], 'readwrite');
-    var store = transaction.objectStore(storeName);
-    var request = store.put({id: 1, string: string});
-
-    request.onsuccess = function() {
-        console.log('String stored successfully');
-    };
-
-    request.onerror = function(e) {
-        console.error('Error storing string:', e.target.error);
-    };
+function handleUpload(event) {
+    // 这里可以添加上传文件的逻辑
+    // 请注意，GitHub Pages不支持文件上传，您需要使用第三方服务
+    event.preventDefault();
+    alert('请使用第三方服务来上传文件。');
 }
-
-// 获取字符串的函数
-function getString(db) {
-    var transaction = db.transaction([storeName], 'readonly');
-    var store = transaction.objectStore(storeName);
-    var request = store.get(1);
-
-    request.onsuccess = function(e) {
-        var result = e.target.result;
-        if (result) {
-            document.getElementById('sharedStringDisplay').textContent = result.string;
-        }
-    };
-
-    request.onerror = function(e) {
-        console.error('Error getting string:', e.target.error);
-    };
-}
-
-// 更新字符串并存储的函数
-function updateSharedString() {
-    var db = openDB();
-    var newString = document.getElementById('sharedStringInput').value;
-    storeString(db, newString);
-    getString(db);
-}
-
-// 页面加载时初始化
-document.addEventListener('DOMContentLoaded', function() {
-    var db = openDB();
-    getString(db);
-});
-</script>
-</head>
+</html>
 <body>
-<h1>共享字符串存储</h1>
-<p>当前共享字符串: <span id="sharedStringDisplay"></span></p>
-<input type="text" id="sharedStringInput" placeholder="在此处键入新字符串" onblur="updateSharedString()">
+<h1>文件上传工具</h1>
+<!-- 文件选择输入 -->
+<input type="file" id="fileInput" multiple onchange="handleFileSelect(event)">
+<!-- 上传按钮 -->
+<button onclick="handleUpload(event)">上传文件</button>
 </body>
 </html>
